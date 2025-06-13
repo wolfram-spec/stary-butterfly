@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flying Butterflies - Spring Sky</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            background: linear-gradient(to bottom, 
+                #FF8A65 0%,
+                #FFB74D 15%,
+                #FFF176 30%,
+                #FF7043 45%,
+                #E57373 60%,
+                #BA68C8 75%,
+                #9575CD 90%,
+                #424242 100%);
+            cursor: none;
+            touch-action: none;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        .star.small {
+            width: 2px;
+            height: 2px;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+        }
+
+        .star.medium {
+            width: 3px;
+            height: 3px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+        }
+
+        .star.large {
+            width: 4px;
+            height: 4px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 1);
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        .clouds {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .cloud {
+            position: absolute;
+            background: linear-gradient(135deg, 
+                rgba(180, 120, 50, 0.9) 0%,
+                rgba(160, 80, 60, 0.85) 30%,
+                rgba(140, 60, 70, 0.8) 60%,
+                rgba(120, 40, 80, 0.75) 100%);
+            border-radius: 50px;
+            opacity: 0.9;
+            animation: float 20s infinite linear;
+            box-shadow: 0 0 25px rgba(180, 60, 40, 0.4);
+        }
+
+        .cloud:before {
+            content: '';
+            position: absolute;
+            background: linear-gradient(135deg, 
+                rgba(160, 100, 40, 0.8) 0%,
+                rgba(140, 70, 50, 0.75) 50%,
+                rgba(120, 50, 60, 0.7) 100%);
+            border-radius: 50px;
+        }
+
+        .cloud:after {
+            content: '';
+            position: absolute;
+            background: linear-gradient(135deg, 
+                rgba(160, 100, 40, 0.8) 0%,
+                rgba(140, 70, 50, 0.75) 50%,
+                rgba(120, 50, 60, 0.7) 100%);
+            border-radius: 50px;
+        }
+
+        .cloud1 {
+            width: 100px;
+            height: 60px;
+            top: 20%;
+            animation-duration: 30s;
+        }
+
+        .cloud1:before {
+            width: 50px;
+            height: 50px;
+            top: -25px;
+            left: 10px;
+        }
+
+        .cloud1:after {
+            width: 60px;
+            height: 40px;
+            top: -15px;
+            right: 10px;
+        }
+
+        .cloud2 {
+            width: 80px;
+            height: 40px;
+            top: 40%;
+            animation-duration: 25s;
+            animation-delay: -10s;
+        }
+
+        .cloud2:before {
+            width: 40px;
+            height: 40px;
+            top: -20px;
+            left: 5px;
+        }
+
+        .cloud2:after {
+            width: 50px;
+            height: 30px;
+            top: -10px;
+            right: 5px;
+        }
+
+        .cloud3 {
+            width: 120px;
+            height: 50px;
+            top: 10%;
+            animation-duration: 35s;
+            animation-delay: -20s;
+        }
+
+        .cloud3:before {
+            width: 60px;
+            height: 60px;
+            top: -30px;
+            left: 15px;
+        }
+
+        .cloud3:after {
+            width: 70px;
+            height: 40px;
+            top: -20px;
+            right: 15px;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateX(-150px);
+            }
+            100% {
+                transform: translateX(calc(100vw + 150px));
+            }
+        }
+
+        .butterfly {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            pointer-events: none;
+            transition: transform 0.3s ease-out;
+        }
+
+        .butterfly-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        .butterfly-wings {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        .butterfly-body {
+            position: absolute;
+            left: 50%;
+            top: 20%;
+            width: 3px;
+            height: 60%;
+            background: linear-gradient(to bottom, #444, #222, #333, #1a1a1a);
+            border-radius: 2px;
+            transform: translateX(-50%);
+            z-index: 10;
+            box-shadow: 0 0 3px rgba(0,0,0,0.5);
+        }
+
+        .butterfly-body::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #333, #111);
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+
+        .butterfly-body::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: -8px;
+            width: 16px;
+            height: 1.5px;
+            background: linear-gradient(90deg, transparent, #333, #333, transparent);
+            border-radius: 1px;
+        }
+
+        .wing {
+            position: absolute;
+            border-radius: 70% 30% 80% 20%;
+            filter: drop-shadow(2px 2px 6px rgba(0,0,0,0.2));
+            transform-style: preserve-3d;
+            transition: transform 0.05s ease-out;
+        }
+
+        .wing-top-left {
+            top: 8%;
+            left: 8%;
+            width: 40%;
+            height: 45%;
+            transform-origin: 85% 90%;
+            animation: wingFlutterLeft 0.3s ease-in-out infinite alternate;
+        }
+
+        .wing-top-right {
+            top: 8%;
+            right: 8%;
+            width: 40%;
+            height: 45%;
+            transform-origin: 15% 90%;
+            animation: wingFlutterRight 0.3s ease-in-out infinite alternate;
+        }
+
+        .wing-bottom-left {
+            bottom: 20%;
+            left: 15%;
+            width: 32%;
+            height: 35%;
+            transform-origin: 80% 20%;
+            border-radius: 50% 50% 80% 40%;
+            animation: wingFlutterLeft 0.3s ease-in-out infinite alternate;
+            animation-delay: 0.05s;
+        }
+
+        .wing-bottom-right {
+            bottom: 20%;
+            right: 15%;
+            width: 32%;
+            height: 35%;
+            transform-origin: 20% 20%;
+            border-radius: 50% 50% 40% 80%;
+            animation: wingFlutterRight 0.3s ease-in-out infinite alternate;
+            animation-delay: 0.05s;
+        }
+
+        @keyframes wingFlutterLeft {
+            0% {
+                transform: rotateY(-15deg) rotateX(5deg) rotateZ(-5deg);
+            }
+            50% {
+                transform: rotateY(-45deg) rotateX(10deg) rotateZ(-15deg);
+            }
+            100% {
+                transform: rotateY(-75deg) rotateX(15deg) rotateZ(-25deg);
+            }
+        }
+
+        @keyframes wingFlutterRight {
+            0% {
+                transform: rotateY(15deg) rotateX(5deg) rotateZ(5deg);
+            }
+            50% {
+                transform: rotateY(45deg) rotateX(10deg) rotateZ(15deg);
+            }
+            100% {
+                transform: rotateY(75deg) rotateX(15deg) rotateZ(25deg);
+            }
+        }
+
+        /* Slow wing animation for resting/hovering */
+        .butterfly.hovering .wing-top-left,
+        .butterfly.hovering .wing-bottom-left {
+            animation: wingHoverLeft 1.2s ease-in-out infinite alternate;
+        }
+
+        .butterfly.hovering .wing-top-right,
+        .butterfly.hovering .wing-bottom-right {
+            animation: wingHoverRight 1.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes wingHoverLeft {
+            0% {
+                transform: rotateY(-10deg) rotateX(2deg) rotateZ(-3deg);
+            }
+            100% {
+                transform: rotateY(-25deg) rotateX(5deg) rotateZ(-8deg);
+            }
+        }
+
+        @keyframes wingHoverRight {
+            0% {
+                transform: rotateY(10deg) rotateX(2deg) rotateZ(3deg);
+            }
+            100% {
+                transform: rotateY(25deg) rotateX(5deg) rotateZ(8deg);
+            }
+        }
+
+        /* Fast wing animation for quick movements */
+        .butterfly.fast-flying .wing-top-left,
+        .butterfly.fast-flying .wing-bottom-left {
+            animation: wingFastLeft 0.15s ease-in-out infinite alternate;
+        }
+
+        .butterfly.fast-flying .wing-top-right,
+        .butterfly.fast-flying .wing-bottom-right {
+            animation: wingFastRight 0.15s ease-in-out infinite alternate;
+        }
+
+        @keyframes wingFastLeft {
+            0% {
+                transform: rotateY(-20deg) rotateX(8deg) rotateZ(-10deg);
+            }
+            100% {
+                transform: rotateY(-85deg) rotateX(20deg) rotateZ(-30deg);
+            }
+        }
+
+        @keyframes wingFastRight {
+            0% {
+                transform: rotateY(20deg) rotateX(8deg) rotateZ(10deg);
+            }
+            100% {
+                transform: rotateY(85deg) rotateX(20deg) rotateZ(30deg);
+            }
+        }
+
+        /* Orange Butterfly */
+        .butterfly-orange .wing-top-left,
+        .butterfly-orange .wing-top-right {
+            background: 
+                radial-gradient(ellipse at 30% 40%, rgba(255, 255, 255, 0.5) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 20%, rgba(255, 200, 100, 0.9) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(255, 140, 0, 0.3) 0%, transparent 40%),
+                linear-gradient(135deg, #ff7b35 0%, #ff9545 30%, #ffb555 60%, #ffa035 100%);
+            border: 1px solid rgba(139, 69, 19, 0.4);
+        }
+
+        .butterfly-orange .wing-bottom-left,
+        .butterfly-orange .wing-bottom-right {
+            background: 
+                radial-gradient(ellipse at 40% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 40%),
+                radial-gradient(ellipse at 60% 70%, rgba(139, 69, 19, 0.6) 0%, transparent 30%),
+                linear-gradient(135deg, #ff6b25 0%, #ff8535 50%, #8b4513 90%, #654321 100%);
+            border: 1px solid rgba(101, 67, 33, 0.5);
+        }
+
+        /* Pink Butterfly */
+        .butterfly-pink .wing-top-left,
+        .butterfly-pink .wing-top-right {
+            background: 
+                radial-gradient(ellipse at 25% 35%, rgba(255, 255, 255, 0.7) 0%, transparent 40%),
+                radial-gradient(ellipse at 60% 60%, rgba(255, 182, 193, 0.8) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(255, 20, 147, 0.4) 0%, transparent 35%),
+                linear-gradient(135deg, #ff69b4 0%, #ffb6c1 30%, #ffc0cb 60%, #ff91a4 100%);
+            border: 1px solid rgba(199, 21, 133, 0.4);
+        }
+
+        .butterfly-pink .wing-bottom-left,
+        .butterfly-pink .wing-bottom-right {
+            background: 
+                radial-gradient(ellipse at 40% 40%, rgba(255, 255, 255, 0.5) 0%, transparent 35%),
+                radial-gradient(ellipse at 20% 70%, rgba(139, 0, 139, 0.5) 0%, transparent 40%),
+                linear-gradient(135deg, #ff1493 0%, #ff69b4 40%, #da70d6 80%, #8b008b 100%);
+            border: 1px solid rgba(139, 0, 139, 0.5);
+        }
+
+        /* Purple Butterfly */
+        .butterfly-purple .wing-top-left,
+        .butterfly-purple .wing-top-right {
+            background: 
+                radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.6) 0%, transparent 45%),
+                radial-gradient(ellipse at 65% 55%, rgba(186, 164, 235, 0.8) 0%, transparent 50%),
+                radial-gradient(ellipse at 15% 75%, rgba(75, 0, 130, 0.4) 0%, transparent 30%),
+                linear-gradient(135deg, #9370db 0%, #b19cd9 30%, #dda0dd 50%, #ba55d3 100%);
+            border: 1px solid rgba(75, 0, 130, 0.4);
+        }
+
+        .butterfly-purple .wing-bottom-left,
+        .butterfly-purple .wing-bottom-right {
+            background: 
+                radial-gradient(ellipse at 35% 35%, rgba(255, 255, 255, 0.4) 0%, transparent 40%),
+                radial-gradient(ellipse at 70% 60%, rgba(75, 0, 130, 0.6) 0%, transparent 35%),
+                linear-gradient(135deg, #8b008b 0%, #9370db 30%, #4b0082 70%, #2e0054 100%);
+            border: 1px solid rgba(46, 0, 84, 0.5);
+        }
+
+        /* Blue Butterfly */
+        .butterfly-blue .wing-top-left,
+        .butterfly-blue .wing-top-right {
+            background: 
+                radial-gradient(ellipse at 25% 35%, rgba(255, 255, 255, 0.7) 0%, transparent 40%),
+                radial-gradient(ellipse at 70% 50%, rgba(173, 216, 230, 0.9) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 15%, rgba(25, 25, 112, 0.3) 0%, transparent 30%),
+                linear-gradient(135deg, #4169e1 0%, #6495ed 30%, #87ceeb 50%, #5a9fd4 100%);
+            border: 1px solid rgba(25, 25, 112, 0.4);
+        }
+
+        .butterfly-blue .wing-bottom-left,
+        .butterfly-blue .wing-bottom-right {
+            background: 
+                radial-gradient(ellipse at 40% 30%, rgba(255, 255, 255, 0.5) 0%, transparent 35%),
+                radial-gradient(ellipse at 25% 80%, rgba(25, 25, 112, 0.5) 0%, transparent 40%),
+                linear-gradient(135deg, #191970 0%, #4169e1 40%, #1e3a8a 80%, #0f1419 100%);
+            border: 1px solid rgba(25, 25, 112, 0.5);
+        }
+
+        .glitter {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, #fff, #ffeb3b);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkle 1s ease-out forwards;
+            box-shadow: 0 0 8px #ffeb3b, 0 0 15px rgba(255, 235, 59, 0.5);
+        }
+
+        @keyframes sparkle {
+            0% {
+                opacity: 1;
+                transform: scale(0) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1) rotate(180deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5) rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .butterfly {
+                width: 55px;
+                height: 55px;
+            }
+            
+            .glitter {
+                width: 4px;
+                height: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="clouds">
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
+    </div>
+
+    <script>
+        // Create stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const starCount = 150;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random size
+                const sizes = ['small', 'medium', 'large'];
+                const weights = [0.7, 0.25, 0.05]; // More small stars, fewer large ones
+                let randomValue = Math.random();
+                let sizeClass;
+                
+                if (randomValue < weights[0]) {
+                    sizeClass = sizes[0];
+                } else if (randomValue < weights[0] + weights[1]) {
+                    sizeClass = sizes[1];
+                } else {
+                    sizeClass = sizes[2];
+                }
+                
+                star.classList.add(sizeClass);
+                
+                // Random position (stars more visible in darker areas - top and bottom)
+                const isTopArea = Math.random() < 0.3;
+                const isBottomArea = Math.random() < 0.4;
+                
+                if (isTopArea) {
+                    star.style.top = Math.random() * 30 + '%';
+                } else if (isBottomArea) {
+                    star.style.top = (70 + Math.random() * 30) + '%';
+                } else {
+                    star.style.top = Math.random() * 100 + '%';
+                }
+                
+                star.style.left = Math.random() * 100 + '%';
+                
+                // Random animation delay and duration
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (2 + Math.random() * 3) + 's';
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Initialize stars
+        createStars();
+
+        class Butterfly {
+            constructor() {
+                this.element = this.createElement();
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.vx = (Math.random() - 0.5) * 1.5;
+                this.vy = (Math.random() - 0.5) * 1.5;
+                this.directionChangeTimer = 0;
+                this.speed = 0.8 + Math.random() * 0.7;
+                this.angle = Math.random() * Math.PI * 2;
+                this.hoverTimer = 0;
+                this.isHovering = false;
+                this.wingBeatPhase = Math.random() * Math.PI * 2;
+                this.lastSpeed = 0;
+                this.animate();
+            }
+
+            createElement() {
+                const colors = ['orange', 'pink', 'purple', 'blue'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                const butterfly = document.createElement('div');
+                butterfly.className = `butterfly butterfly-${color}`;
+                
+                butterfly.innerHTML = `
+                    <div class="butterfly-container">
+                        <div class="butterfly-wings">
+                            <div class="butterfly-body"></div>
+                            <div class="wing wing-top-left"></div>
+                            <div class="wing wing-top-right"></div>
+                            <div class="wing wing-bottom-left"></div>
+                            <div class="wing wing-bottom-right"></div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(butterfly);
+                return butterfly;
+            }
+
+            animate() {
+                this.directionChangeTimer++;
+                this.hoverTimer++;
+                
+                // Change direction periodically with more natural curves
+                if (this.directionChangeTimer > 60 + Math.random() * 180) {
+                    // Create more natural curved flight paths
+                    this.angle += (Math.random() - 0.5) * 0.5;
+                    this.speed = 0.5 + Math.random() * 1.2;
+                    
+                    // Occasionally hover in place
+                    if (Math.random() < 0.1) {
+                        this.isHovering = true;
+                        this.hoverTimer = 0;
+                        this.speed = 0.1;
+                    }
+                    
+                    this.directionChangeTimer = 0;
+                }
+
+                // Exit hover mode after some time
+                if (this.isHovering && this.hoverTimer > 120 + Math.random() * 180) {
+                    this.isHovering = false;
+                    this.speed = 0.8 + Math.random() * 0.7;
+                }
+
+                // Apply gentle random variations to create more organic movement
+                this.angle += (Math.random() - 0.5) * 0.1;
+                
+                if (!this.isHovering) {
+                    this.vx = Math.cos(this.angle) * this.speed;
+                    this.vy = Math.sin(this.angle) * this.speed;
+                    
+                    // Add slight up/down oscillation like real butterflies
+                    this.vy += Math.sin(Date.now() * 0.003 + this.wingBeatPhase) * 0.2;
+                } else {
+                    // Gentle hovering motion
+                    this.vx = Math.sin(Date.now() * 0.002) * 0.3;
+                    this.vy = Math.cos(Date.now() * 0.0015) * 0.2;
+                }
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Screen wrapping with smooth transitions
+                if (this.x < -80) this.x = window.innerWidth + 80;
+                if (this.x > window.innerWidth + 80) this.x = -80;
+                if (this.y < -80) this.y = window.innerHeight + 80;
+                if (this.y > window.innerHeight + 80) this.y = -80;
+
+                // Update position
+                this.element.style.left = this.x + 'px';
+                this.element.style.top = this.y + 'px';
+
+                // Rotate butterfly based on movement direction
+                const movementAngle = Math.atan2(this.vy, this.vx) * 180 / Math.PI;
+                this.element.style.transform = `rotate(${movementAngle}deg)`;
+
+                // Update wing animation based on speed and behavior
+                const currentSpeed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                
+                // Remove all animation classes first
+                this.element.classList.remove('hovering', 'fast-flying');
+                
+                if (this.isHovering || currentSpeed < 0.5) {
+                    this.element.classList.add('hovering');
+                } else if (currentSpeed > 1.5) {
+                    this.element.classList.add('fast-flying');
+                }
+
+                this.lastSpeed = currentSpeed;
+
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Create butterflies with staggered timing
+        const butterflies = [];
+        for (let i = 0; i < 8; i++) {
+            setTimeout(() => {
+                butterflies.push(new Butterfly());
+            }, i * 800);
+        }
+
+        // Enhanced glitter trail function with sunset colors
+        function createGlitter(x, y) {
+            const colors = [
+                '#FFD700', '#FF6B35', '#F7931E', '#FFD23F', 
+                '#FF8C42', '#FF6B6B', '#C44569', '#8B4CB8',
+                '#FFA500', '#FF4500', '#FFB347', '#FF69B4'
+            ];
+            
+            for (let i = 0; i < 4; i++) {
+                const glitter = document.createElement('div');
+                glitter.className = 'glitter';
+                
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                glitter.style.background = `radial-gradient(circle, ${randomColor}, ${randomColor}88)`;
+                glitter.style.boxShadow = `0 0 12px ${randomColor}, 0 0 20px ${randomColor}44`;
+                
+                const offsetX = (Math.random() - 0.5) * 30;
+                const offsetY = (Math.random() - 0.5) * 30;
+                glitter.style.left = (x + offsetX - 3) + 'px';
+                glitter.style.top = (y + offsetY - 3) + 'px';
+                
+                // Add slight delay for more organic sparkle effect
+                glitter.style.animationDelay = (Math.random() * 0.3) + 's';
+                
+                document.body.appendChild(glitter);
+
+                setTimeout(() => {
+                    if (glitter.parentNode) {
+                        glitter.parentNode.removeChild(glitter);
+                    }
+                }, 1300);
+            }
+        }
+
+        // Mouse movement handler
+        let lastGlitterTime = 0;
+        function handlePointerMove(e) {
+            const currentTime = Date.now();
+            if (currentTime - lastGlitterTime > 30) {
+                let x, y;
+                if (e.touches && e.touches[0]) {
+                    x = e.touches[0].clientX;
+                    y = e.touches[0].clientY;
+                } else {
+                    x = e.clientX;
+                    y = e.clientY;
+                }
+                createGlitter(x, y);
+                lastGlitterTime = currentTime;
+            }
+        }
+
+        // Event listeners for both mouse and touch
+        document.addEventListener('mousemove', handlePointerMove);
+        document.addEventListener('touchmove', handlePointerMove, { passive: true });
+        document.addEventListener('touchstart', handlePointerMove, { passive: true });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            butterflies.forEach(butterfly => {
+                if (butterfly.x > window.innerWidth) butterfly.x = window.innerWidth - 80;
+                if (butterfly.y > window.innerHeight) butterfly.y = window.innerHeight - 80;
+            });
+        });
+
+        // Enhanced cloud creation
+        function createCloud() {
+            const cloud = document.createElement('div');
+            const size = 60 + Math.random() * 100;
+            const height = size * (0.5 + Math.random() * 0.3);
+            
+            cloud.className = 'cloud';
+            cloud.style.width = size + 'px';
+            cloud.style.height = height + 'px';
+            cloud.style.top = Math.random() * 60 + '%';
+            cloud.style.left = '-150px';
+            cloud.style.animationDuration = (15 + Math.random() * 25) + 's';
+            cloud.style.opacity = 0.6 + Math.random() * 0.4;
+            
+            // Add slight vertical drift
+            cloud.style.animationName = 'float';
+            
+            document.querySelector('.clouds').appendChild(cloud);
+            
+            setTimeout(() => {
+                if (cloud.parentNode) {
+                    cloud.parentNode.removeChild(cloud);
+                }
+            }, 60000);
+        }
+
+        // Create new clouds periodically
+        setInterval(createCloud, 6000);
+    </script>
+</body>
+</html>
